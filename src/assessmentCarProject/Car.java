@@ -8,7 +8,7 @@ package assessmentCarProject;
 public class Car {
 	
 	// Private fields
-	private int carID;
+	private String carID;
 	private String brand;
 	private String model;
 	private int year;
@@ -17,7 +17,7 @@ public class Car {
 	private double mileageKmpl;
 	
     // Constructor
-	public Car(int carID, String brand, String model, int year, String fuelType, String color, double mileageKmpl) {
+	public Car(String carID, String brand, String model, int year, String fuelType, String color, double mileageKmpl) {
 		
 		this.carID = carID;
 		this.brand = brand;
@@ -30,7 +30,7 @@ public class Car {
 	
 	// Getters
 	
-	public int getCarID() {
+	public String getCarID() {
 		return carID;
 	}
 	
