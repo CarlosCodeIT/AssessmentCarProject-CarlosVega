@@ -65,23 +65,69 @@ public class CarAssessment {
 	public static void main(String[] args) {
 		ArrayList<Car> cars = loadCars("Car_data.csv");
 		
+		// Working list (first 2000 cars)
 		ArrayList<Car> working = new ArrayList<>(cars.subList(0, 2000));
 		System.out.println("Working list size: " + working.size());
 		
-		// Sort by mileage
-		insertionSortByMileage(working);
+		Scanner input = new Scanner(System.in);
+		boolean running = true;
 		
-		// Search for a specific mileage
-		double searchMileage = 15.16;
-		int index = binarySearchMileage(working, searchMileage);
-		
-		if (index != -1) {
-			System.out.println("Car found: " + working.get(index));
-		} else {
-			System.out.println("No car found with mileage: " + searchMileage);
+		while (running) {
+			System.out.println("\n===== CAR MENU =====");
+			System.out.println("1. Sort cars by Mileage");
+			System.out.println("2. Search for cars by Mileage");
+			System.out.println("3. Display statistics");
+			System.out.println("4. Exit");
+			System.out.print("Choose an option: ");
+			
+			int choice = input.nextInt();
+			input.nextLine();
+			
+			switch (choice) {
+			
+			// Sort by mileage
+			case 1:
+			    insertionSortByMileage(working);
+			    System.out.println("Cars sorted by mileage.");
+			
+			    System.out.println("\nFirst 10 cars after sorting:");
+			    for (int i = 0; i < 10; i++) {
+				    System.out.println(working.get(i));
+			    }
+			    break;
+			// Search by mileage
+			case 2:
+				System.out.print("Enter mileage to search: ");
+				double target = input.nextDouble();
+				int index = binarySearchMileage(working, target);
+				
+				if (index != -1) {
+					System.out.println("\nCars with mileage" + target + ":");
+					displayAllMatchingMileage(working, target);
+				} else {
+					System.out.println("No cars found with mileage: " + target);
+				}
+				break;
+			// Statistics (Extra credit)
+			case 3: 
+				displayStatistics(working);
+				break;
+			//Exit
+			case 4:
+				running = false;
+				System.out.println("Exiting program...");
+				break;
+				
+			default:
+				System.out.println("Invalid choice. Try again.");
+				
+			}
 		}
+		
+		input.close();
 	}
 	
+	// Insertion sort
 	public static void insertionSortByMileage(ArrayList<Car> working) {
 		
 		for (int i = 1; i < working.size(); i++) {
@@ -100,6 +146,7 @@ public class CarAssessment {
 		}
 	}
 	
+	//binary search
 	public static int binarySearchMileage(ArrayList<Car> working, double targetMileage) {
 		int left = 0;
 		int right = working.size() - 1;
@@ -120,6 +167,38 @@ public class CarAssessment {
 		}
 		
 		return -1; // not found
+	}
+	
+	//Display all matching mileage
+	public static void displayAllMatchingMileage(ArrayList<Car> working, double mileage) {
+		boolean found = false;
+		
+		for(Car c : working) {
+			if (c.getMileageKmpl() ==  mileage) {
+				System.out.println(c);
+				found = true;
+			}
+		}
+		
+		if (!found) {
+			System.out.println("No cars found with mileage: " + mileage);
+		}
+	}
+	
+	//Statistics (Extra credit)
+	public static void displayStatistics(ArrayList<Car> working) {
+		
+		double totalMileage = 0;
+		
+		for (Car c : working) {
+			totalMileage += c.getMileageKmpl();
+		}
+		
+		double avgMileage = totalMileage / working.size();
+		
+		System.out.println("\n===== Statistics =====");
+		System.out.println("Average mileage of working list: " + avgMileage);
+		
 	}
 
 }
