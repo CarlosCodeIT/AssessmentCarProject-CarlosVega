@@ -67,6 +67,59 @@ public class CarAssessment {
 		
 		ArrayList<Car> working = new ArrayList<>(cars.subList(0, 2000));
 		System.out.println("Working list size: " + working.size());
+		
+		// Sort by mileage
+		insertionSortByMileage(working);
+		
+		// Search for a specific mileage
+		double searchMileage = 15.16;
+		int index = binarySearchMileage(working, searchMileage);
+		
+		if (index != -1) {
+			System.out.println("Car found: " + working.get(index));
+		} else {
+			System.out.println("No car found with mileage: " + searchMileage);
+		}
+	}
+	
+	public static void insertionSortByMileage(ArrayList<Car> working) {
+		
+		for (int i = 1; i < working.size(); i++) {
+			Car key = working.get(i);
+			double keyMileage = key.getMileageKmpl();
+			
+			int j = i - 1;
+			
+			// Shift cars with larger mileage to the right
+			while (j >= 0 && working.get(j).getMileageKmpl() > keyMileage) {
+				working.set(j + 1, working.get(j));
+				j--;
+			}
+			
+			working.set(j + 1, key);
+		}
+	}
+	
+	public static int binarySearchMileage(ArrayList<Car> working, double targetMileage) {
+		int left = 0;
+		int right = working.size() - 1;
+		
+		while (left <= right) {
+			int mid = (left + right) / 2;
+			double midMileage = working.get(mid).getMileageKmpl();
+			
+			if (midMileage == targetMileage) {
+				return mid; // found
+			}
+			else if (midMileage < targetMileage) {
+				left = mid + 1;
+			}
+			else {
+				right = mid - 1;
+			}
+		}
+		
+		return -1; // not found
 	}
 
 }
